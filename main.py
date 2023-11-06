@@ -288,7 +288,8 @@ if __name__ == "__main__":
 
     # last_rowの数だけfor文を回す
     for i in range(last_row):
-        time_sleep = 0.5
+        time_sleep = 0.01
+        # time_sleep = 0.5
 
         logging.info("処理:", i + 1, "/", last_row)
         print("処理:", i + 1, "/", last_row)
