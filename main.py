@@ -290,6 +290,7 @@ if __name__ == "__main__":
     for i in range(last_row):
         time_sleep = 0.01
         # time_sleep = 0.5
+        # ↑今回は殆ど機能してない
 
         logging.info("処理:", i + 1, "/", last_row)
         print("処理:", i + 1, "/", last_row)
