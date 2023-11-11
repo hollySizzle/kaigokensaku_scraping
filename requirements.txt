@@ -1,4 +1,0 @@
-pykakasi==2.2.1
-requests==2.27.1
-requests-html==0.10.0
-pyppeteer==0.2.2
