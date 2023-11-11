@@ -5,3 +5,4 @@ services:
     build: ./python
     container_name: kaignokensaku_scraping_python
     tty: true
+    stdin_open: true
