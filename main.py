@@ -5,6 +5,10 @@ import pandas as pd
 import logging
 import re  # 正規表現モジュールをインポート
 import time
+import glob
+import os
+import datetime
+import shutil
 
 # import pykakasi
 # kakasi = pykakasi.kakasi() # インスタンスの作成
@@ -278,9 +282,7 @@ def purse_html_feature(dataset, elements):
     return dataset
 
 
-if __name__ == "__main__":
-    print("start")
-    xlsx_file = "和歌山_兵庫.xlsx"
+def scrape_controller(xlsx_file_path):
     df = pd.read_excel(xlsx_file, header=0, index_col=0)
 
     last_row = df.shape[0] - 1
@@ -339,6 +341,7 @@ if __name__ == "__main__":
         # dataset = purse_html_kihon(dataset, elements)
 
         # **********************************************************
+
         # 事業所の特色
 
         # 事業所の特色 URL取得のため､url の値から {{_数値_}} & kani を feature に置換する
@@ -387,3 +390,39 @@ if __name__ == "__main__":
 
     # for が終わったら､dfを読み込みファイルに上書き保存する
     df.to_excel(xlsx_file)
+
+
+if __name__ == "__main__":
+    print("start")
+
+    # ./data/rawからxlsxファイルを全て取得する
+    xlsx_files = glob.glob("./data/raw/*.xlsx")
+
+    # xlsx_filesの数だけfor文を回す
+    for xlsx_file in xlsx_files:
+        # xlsx_fileのファイル名を取得する
+        xlsx_file_name = os.path.basename(xlsx_file)
+
+        # ./data/process/に現在の日時を付けたフォルダを作成し､フォルダパスを取得する
+        folder_path = "./data/processed/" + datetime.datetime.now().strftime(
+            "%Y%m%d%H%M%S"
+        )
+
+        # フォルダを作成する
+        os.makedirs(folder_path)
+
+        # xlsx_fileをfolder_pathにコピーする
+        shutil.copy(xlsx_file, folder_path + "/" + xlsx_file_name)
+
+        # ログファイルの名前を設定する
+        log_file_name = xlsx_file_name + ".log"
+
+        # ログファイルを作成する
+        logging.basicConfig(
+            filename="./log/" + log_file_name,
+            level=logging.INFO,
+            format="%(asctime)s %(levelname)s %(name)s %(message)s",
+        )
+
+        # xlsx_fileを読み込む
+        scrape_controller(folder_path + "/" + xlsx_file_name)
